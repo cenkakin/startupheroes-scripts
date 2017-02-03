@@ -2,8 +2,10 @@
 
 docker login -e ${DOCKER_EMAIL} -u ${DOCKER_USER} -p ${DOCKER_PASS}
 
+last_commit=${CIRCLE_SHA1:0:7}
+
 echo "****************************************************************************"
-echo "************** Last commit =  ${CIRCLE_SHA1} **************************"
+echo "************** Last commit =  ${last_commit} *******************************"
 echo "****************************************************************************"
 cd ${APPS_FOLDER}
 
@@ -16,8 +18,8 @@ for app in ${apps}; do
     echo "****************************************************************************"
     echo "************** Building docker image with name = ${docker_image_name} ******"
     echo "****************************************************************************"
-    docker build -t ${docker_image_name}:${CIRCLE_SHA1} ${app}/target/docker
-    docker tag ${docker_image_name}:${CIRCLE_SHA1} ${docker_image_name}:latest
+    docker build -t ${docker_image_name}:${last_commit} ${app}/target/docker
+    docker tag ${docker_image_name}:${last_commit} ${docker_image_name}:latest
 
     echo "****************************************************************************"
     echo "************** Pushing docker image ${docker_image_name} *******************"
@@ -28,7 +30,7 @@ for app in ${apps}; do
         echo "****************************************************************************"
         echo "************** Deploying docker image ${docker_image_name} *****************"
         echo "****************************************************************************"
-        kubectl patch deployment ${app} -p '{"spec":{"template":{"spec":{"containers":[{"name":"backend-container","image":"'$docker_image_name':'${CIRCLE_SHA1}'"}]}}}}' -n=test
+        kubectl patch deployment ${app} -p '{"spec":{"template":{"spec":{"containers":[{"name":"backend-container","image":"'$docker_image_name':'${last_commit}'"}]}}}}' -n=test
     fi
   fi
 done
