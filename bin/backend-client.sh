@@ -26,7 +26,7 @@ if [ -z "${CIRCLE_PR_NUMBER}" ] ; then
     cd -
     cd ${CLIENT_PROJECT}/android/ && \
           ./gradlew dependencies && \
-          ./gradlew assembleRelease crashlyticsUploadDistributionInternalRelease crashlyticsUploadDistributionProductionRelease && \
+          ./gradlew assembleInternalRelease assembleProductionRelease crashlyticsUploadDistributionInternalRelease crashlyticsUploadDistributionProductionRelease && \
           cd -
   fi
 
