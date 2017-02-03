@@ -2,9 +2,8 @@
 
 docker login -e ${DOCKER_EMAIL} -u ${DOCKER_USER} -p ${DOCKER_PASS}
 
-last_commit_hash=$(git rev-parse --short HEAD 2> /dev/null )
 echo "****************************************************************************"
-echo "************** Last commit =  ${last_commit_hash} **************************"
+echo "************** Last commit =  ${CIRCLE_SHA1} **************************"
 echo "****************************************************************************"
 cd ${APPS_FOLDER}
 
@@ -17,8 +16,8 @@ for app in ${apps}; do
     echo "****************************************************************************"
     echo "************** Building docker image with name = ${docker_image_name} ******"
     echo "****************************************************************************"
-    docker build -t ${docker_image_name}:${last_commit_hash} ${app}/target/docker
-    docker tag ${docker_image_name}:${last_commit_hash} ${docker_image_name}:latest
+    docker build -t ${docker_image_name}:${CIRCLE_SHA1} ${app}/target/docker
+    docker tag ${docker_image_name}:${CIRCLE_SHA1} ${docker_image_name}:latest
 
     echo "****************************************************************************"
     echo "************** Pushing docker image ${docker_image_name} *******************"
