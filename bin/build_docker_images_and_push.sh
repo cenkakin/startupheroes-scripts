@@ -12,9 +12,6 @@ cd ${APPS_FOLDER}
 
 for app in ${apps}; do
   if [ -d ${app} ]; then
-    echo "****************************************************************************"
-    echo "************** Building ${app} with docker and shade profiles **************"
-    echo "****************************************************************************"
     docker_image_name=$DOCKER_USER/${app}
 
     echo "****************************************************************************"
@@ -27,7 +24,7 @@ for app in ${apps}; do
     echo "************** Pushing docker image ${docker_image_name} *******************"
     echo "****************************************************************************"
     docker push ${docker_image_name}
-   
+
     if hash kubectl 2>/dev/null; then
         echo "****************************************************************************"
         echo "************** Deploying docker image ${docker_image_name} *****************"
