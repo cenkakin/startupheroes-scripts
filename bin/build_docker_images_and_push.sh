@@ -30,7 +30,7 @@ for app in ${apps}; do
         echo "****************************************************************************"
         echo "************** Deploying docker image ${docker_image_name} *****************"
         echo "****************************************************************************"
-        kubectl patch deployment ${app} -p '{"spec":{"template":{"spec":{"containers":[{"name":"backend-container","image":"'$docker_image_name':'${last_commit}'"}]}}}}' -n=test
+        kubectl patch deployment ${app} -p '{"spec":{"template":{"spec":{"containers":[{"name":"application","image":"'$docker_image_name':'${last_commit}'"}]}}}}' -n=test
     fi
   fi
 done
