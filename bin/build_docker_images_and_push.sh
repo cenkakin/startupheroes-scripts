@@ -25,12 +25,5 @@ for app in ${apps}; do
     echo "************** Pushing docker image ${docker_image_name} *******************"
     echo "****************************************************************************"
     docker push ${docker_image_name}
-
-    if hash kubectl 2>/dev/null; then
-        echo "****************************************************************************"
-        echo "************** Deploying docker image ${docker_image_name} *****************"
-        echo "****************************************************************************"
-        kubectl patch deployment ${app} -p '{"spec":{"template":{"spec":{"containers":[{"name":"application","image":"'$docker_image_name':'${last_commit}'"}]}}}}' -n=test
-    fi
   fi
 done
