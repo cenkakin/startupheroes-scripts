@@ -39,6 +39,7 @@ if [ -z "${CIRCLE_PR_NUMBER}" ] ; then
     echo "New hash = ${new_backend_hash}, old hash = ${backend_hash}"
     echo ${new_backend_hash} > ${backend_project_hash_file}
     mvn clean install -U -f ${BACKEND_PROJECT} -Dfat
+    bash ./startupheroes-scripts/bin/build_docker_images_and_push.sh
   fi
 
 fi
