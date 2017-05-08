@@ -1,17 +1,10 @@
 #!/usr/bin/env bash
 
-hashFile=${HOME}/.asset-hash/asset.hash
-
-# create hash file in case the file does not exist
-( [ -e "$hashFile" ] || touch "$hashFile" ) && [ ! -w "$hashFile" ] && echo cannot write to ${hashFile} && exit 1
-
-# hashes
-hash=$(<$hashFile)
-newHash=$(git log -n1 --oneline ${ASSET_FOLDER} | awk '{print $1;}')
+version=$(git log -n1 --oneline ${ASSET_FOLDER} | awk '{print $1;}')
+file_count=$(find $HOME/.m2/ -name ${ASSET_FOLDER}-${version}.jar | wc -l)
 
 # build assets if necessary
-if [ "$hash" != "$newHash" ]; then
-  echo "New hash = ${newHash}, old hash = ${hash}"
-  echo ${newHash} > $hashFile
-  ./mvnw clean install -f ${ASSET_FOLDER}
+if [[ ${file_count} -eq 0 ]]; then
+  echo "Found file count: ${file_count}"
+  ./mvnw clean install -f ${ASSET_FOLDER} -Dasset.version=${version}
 fi
