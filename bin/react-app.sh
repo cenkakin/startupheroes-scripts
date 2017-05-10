@@ -6,8 +6,10 @@ code-push login --accessKey ${CODE_PUSH_ACCESS_KEY}
 code-push release-react ${CODE_PUSH_REPO_NAME} android -d "Staging" --dev false
 cd android
 ./gradlew dependencies
-./gradlew assembleInternalRelease assembleProductionRelease crashlyticsUploadDistributionInternalRelease crashlyticsUploadDistributionProductionRelease
+./gradlew assembleInternalRelease crashlyticsUploadDistributionInternalRelease
+./gradlew assembleProductionRelease crashlyticsUploadDistributionProductionRelease
 cd ..
+mkdir /tmp/bugsnag
 node node_modules/react-native/local-cli/cli.js bundle \
 --platform android \
 --dev false \
