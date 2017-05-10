@@ -8,4 +8,17 @@ cd android
 ./gradlew dependencies
 ./gradlew assembleInternalRelease assembleProductionRelease crashlyticsUploadDistributionInternalRelease crashlyticsUploadDistributionProductionRelease
 cd ..
-
+node node_modules/react-native/local-cli/cli.js bundle \
+--platform android \
+--dev false \
+--entry-file index.android.js \
+--bundle-output /tmp/bugsnag/index.android.bundle \
+--sourcemap-output /tmp/bugsnag/index.android.map
+versionCode=`find android/app/build/outputs/apk/collectify-*production-release.apk | awk -F '-' '{print $3}'`
+curl https://upload.bugsnag.com/ \
+-F apiKey=${BUGSNAG_API_KEY} \
+-F appVersion=$versionCode \
+-F minifiedUrl="index.android.bundle" \
+-F sourceMap=@/tmp/bugsnag/index.android.map \
+-F minifiedFile=@/tmp/bugsnag/index.android.bundle \
+-F overwrite=true
